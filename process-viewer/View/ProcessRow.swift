@@ -32,7 +32,7 @@ struct ProcessRow: View {
                 .foregroundColor(.secondary)
                 .opacity(process.pmem / 100.0)
             
-            Text("\(process.pid)")
+            Text(verbatim: "\(process.pid)")
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
         }.swipeActions(allowsFullSwipe: false) {
