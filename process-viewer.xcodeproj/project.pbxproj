@@ -20,6 +20,10 @@
 		E049EDBB2ADC1466000CF599 /* process_viewerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E049EDBA2ADC1466000CF599 /* process_viewerTests.swift */; };
 		E049EDC52ADC1466000CF599 /* process_viewerUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E049EDC42ADC1466000CF599 /* process_viewerUITests.swift */; };
 		E049EDC72ADC1466000CF599 /* process_viewerUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E049EDC62ADC1466000CF599 /* process_viewerUITestsLaunchTests.swift */; };
+		E057C4B92AE42CD9002B55E4 /* ServerStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = E057C4B82AE42CD9002B55E4 /* ServerStore.swift */; };
+		E057C4BB2AE432EB002B55E4 /* UserStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = E057C4BA2AE432EB002B55E4 /* UserStore.swift */; };
+		E057C4BE2AE4338D002B55E4 /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = E057C4BD2AE4338D002B55E4 /* KeychainAccess */; };
+		E057C4C22AE43B16002B55E4 /* ServerUserCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E057C4C12AE43B16002B55E4 /* ServerUserCreator.swift */; };
 		E0F46BBE2ADC323A00BB1A87 /* Process.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0F46BBD2ADC323A00BB1A87 /* Process.swift */; };
 		E0F46BC12ADC33F700BB1A87 /* ProcessRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0F46BC02ADC33F700BB1A87 /* ProcessRow.swift */; };
 /* End PBXBuildFile section */
@@ -57,6 +61,9 @@
 		E049EDC02ADC1466000CF599 /* process-viewerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "process-viewerUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E049EDC42ADC1466000CF599 /* process_viewerUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = process_viewerUITests.swift; sourceTree = "<group>"; };
 		E049EDC62ADC1466000CF599 /* process_viewerUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = process_viewerUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		E057C4B82AE42CD9002B55E4 /* ServerStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerStore.swift; sourceTree = "<group>"; };
+		E057C4BA2AE432EB002B55E4 /* UserStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserStore.swift; sourceTree = "<group>"; };
+		E057C4C12AE43B16002B55E4 /* ServerUserCreator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerUserCreator.swift; sourceTree = "<group>"; };
 		E0F46BBD2ADC323A00BB1A87 /* Process.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Process.swift; sourceTree = "<group>"; };
 		E0F46BC02ADC33F700BB1A87 /* ProcessRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessRow.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -66,6 +73,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E057C4BE2AE4338D002B55E4 /* KeychainAccess in Frameworks */,
 				E04503842ADDC9D7003DAF4E /* SSHClient in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -92,6 +100,8 @@
 			children = (
 				E0376B402ADC928F0080635A /* SSH.swift */,
 				E0465D842AE1D9FA003DF998 /* ProcessStatus.swift */,
+				E057C4B82AE42CD9002B55E4 /* ServerStore.swift */,
+				E057C4BA2AE432EB002B55E4 /* UserStore.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -170,6 +180,7 @@
 				E0F46BC02ADC33F700BB1A87 /* ProcessRow.swift */,
 				E0465D802AE1C9C3003DF998 /* ServerConfigurator.swift */,
 				E0465D822AE1D172003DF998 /* ProcessViewer.swift */,
+				E057C4C12AE43B16002B55E4 /* ServerUserCreator.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -192,6 +203,7 @@
 			name = "process-viewer";
 			packageProductDependencies = (
 				E04503832ADDC9D7003DAF4E /* SSHClient */,
+				E057C4BD2AE4338D002B55E4 /* KeychainAccess */,
 			);
 			productName = "process-viewer";
 			productReference = E049EDA62ADC1465000CF599 /* process-viewer.app */;
@@ -267,6 +279,7 @@
 			mainGroup = E049ED9D2ADC1465000CF599;
 			packageReferences = (
 				E04503822ADDC9D7003DAF4E /* XCRemoteSwiftPackageReference "swift-ssh-client" */,
+				E057C4BC2AE4338D002B55E4 /* XCRemoteSwiftPackageReference "KeychainAccess" */,
 			);
 			productRefGroup = E049EDA72ADC1465000CF599 /* Products */;
 			projectDirPath = "";
@@ -310,10 +323,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E057C4C22AE43B16002B55E4 /* ServerUserCreator.swift in Sources */,
 				E0465D852AE1D9FA003DF998 /* ProcessStatus.swift in Sources */,
+				E057C4BB2AE432EB002B55E4 /* UserStore.swift in Sources */,
 				E049EDAA2ADC1465000CF599 /* process_viewerApp.swift in Sources */,
 				E0465D832AE1D172003DF998 /* ProcessViewer.swift in Sources */,
 				E0F46BC12ADC33F700BB1A87 /* ProcessRow.swift in Sources */,
+				E057C4B92AE42CD9002B55E4 /* ServerStore.swift in Sources */,
 				E0376B412ADC928F0080635A /* SSH.swift in Sources */,
 				E0465D812AE1C9C3003DF998 /* ServerConfigurator.swift in Sources */,
 				E0F46BBE2ADC323A00BB1A87 /* Process.swift in Sources */,
@@ -658,6 +674,14 @@
 				minimumVersion = 0.1.4;
 			};
 		};
+		E057C4BC2AE4338D002B55E4 /* XCRemoteSwiftPackageReference "KeychainAccess" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/kishikawakatsumi/KeychainAccess.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -665,6 +689,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = E04503822ADDC9D7003DAF4E /* XCRemoteSwiftPackageReference "swift-ssh-client" */;
 			productName = SSHClient;
+		};
+		E057C4BD2AE4338D002B55E4 /* KeychainAccess */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E057C4BC2AE4338D002B55E4 /* XCRemoteSwiftPackageReference "KeychainAccess" */;
+			productName = KeychainAccess;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

@@ -8,31 +8,39 @@
 import Foundation
 import SwiftUI
 
+
 struct ServerConfigurator : View {
-    @State private var hostname: String = ""
+    @StateObject var serverStore = ServerStore()
+    @StateObject var userStore = UserStore()
     
-    @State private var port_str: String = ""
-    @State private var port: UInt16 = 22
-    
-    @State private var username: String = ""
-    @State private var password: String = ""
+    @State var server: Server = Server()
+    @State var user: User = User()
     
     var body: some View {
         NavigationView {
             Form {
-                Section(header: Text("Server")) {
-                    TextField("Hostname", text: $hostname)
-                    TextField("Port", text: $port_str)
-                        .onSubmit {
-                            port = UInt16(port_str) ?? 22
+                Section(header: Text("Configuration")) {
+                    Picker("Server", selection: $server) {
+                        ForEach(serverStore.serverList) { serv in
+                            Text("\(serv.host):\(serv.port)")
+                                .tag(serv)
                         }
-                        .keyboardType(.numberPad)
-                    TextField("Username", text: $username)
-                    SecureField("Password", text: $password)
+                    }
+                    Picker("User", selection: $user) {
+                        ForEach(userStore.userList) { usr in
+                            Text(usr.name)
+                                .tag(usr)
+                        }
+                    }
                 }
-                Section(header: Text("Processes")) {
-                    NavigationLink("Connect") {
-                        ProcessViewer(server: Server(host: hostname, port: port), user: User(name: username, password: password))
+                Section(header: Text("Utils")) {
+                    NavigationLink("Processes") {
+                        ProcessViewer(server: self.server, user: self.user)
+                    }
+                }
+                .toolbar {
+                    NavigationLink(destination: ServerUserCreator(serverStore: self.serverStore, userStore: self.userStore)) {
+                        Image(systemName: "plus")
                     }
                 }
             }.navigationTitle("Server")
