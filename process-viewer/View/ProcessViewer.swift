@@ -11,6 +11,7 @@ import SwiftUI
 
 struct ProcessViewer : View {
     @StateObject var ps: ProcessStatus
+    @State var filterStr: String = ""
     
     init(server: Server, user: User) {
         self._ps = StateObject(wrappedValue: ProcessStatus(server: server, user: user))
@@ -21,13 +22,24 @@ struct ProcessViewer : View {
             Section(header: Text("Status")) {
                 SSHStatus(ssh: ps.ssh)
             }
+            Section(header: Text("Search")) {
+                TextField("User, command, PID ...", text: $filterStr)
+                    .autocorrectionDisabled()
+            }
             Section(header: HStack {
                 Text("Processes")
                 Spacer()
                 Button("Refresh", systemImage: "arrow.clockwise", action: self.ps.getProcesses)
                     .labelStyle(.titleAndIcon)
             }) {
-                List (ps.processes) { process in
+                List (
+                    ps.processes.filter { process in
+                        if (self.filterStr == "") {
+                            return true
+                        }
+                        return process.user.contains(self.filterStr) || process.cmd.contains(self.filterStr) || String(process.pid).contains(self.filterStr)
+                    }
+                ) { process in
                     ProcessRow(ps: ps, process: process)
                 }
             }
