@@ -31,7 +31,7 @@ struct ServerConfigurator : View {
                     SecureField("Password", text: $password)
                 }
                 Section(header: Text("Processes")) {
-                    NavigationLink("View") {
+                    NavigationLink("Connect") {
                         ProcessViewer(server: Server(host: hostname, port: port), user: User(name: username, password: password))
                     }
                 }

@@ -34,6 +34,18 @@ import Foundation
         }
     }
     
+    func sendSignal(pid: Int, signal: String) {
+        Task() {
+            let (statusCode, _, stderr) = try await self.ssh.execute(cmd: "kill -s \(signal) \(pid)")
+            if (statusCode != 0) {
+                print(stderr)
+                return
+            }
+            
+            self.getProcesses()
+        }
+    }
+    
     static func parse(stdout: String) -> [Process] {
         var processes: [Process] = []
         

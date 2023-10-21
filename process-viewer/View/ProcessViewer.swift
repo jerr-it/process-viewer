@@ -10,25 +10,25 @@ import SwiftUI
 
 
 struct ProcessViewer : View {
-    @StateObject var processStatus: ProcessStatus
+    @StateObject var ps: ProcessStatus
     
     init(server: Server, user: User) {
-        self._processStatus = StateObject(wrappedValue: ProcessStatus(server: server, user: user))
+        self._ps = StateObject(wrappedValue: ProcessStatus(server: server, user: user))
     }
     
     var body: some View {
         Form {
             Section(header: Text("Status")) {
-                SSHStatus(ssh: processStatus.ssh)
+                SSHStatus(ssh: ps.ssh)
             }
             Section(header: HStack {
                 Text("Processes")
                 Spacer()
-                Button("Refresh", systemImage: "arrow.clockwise", action: self.processStatus.getProcesses)
+                Button("Refresh", systemImage: "arrow.clockwise", action: self.ps.getProcesses)
                     .labelStyle(.titleAndIcon)
             }) {
-                List (processStatus.processes) { process in
-                    ProcessRow(process: process)
+                List (ps.processes) { process in
+                    ProcessRow(ps: ps, process: process)
                 }
             }
         }.navigationTitle("Process Viewer")

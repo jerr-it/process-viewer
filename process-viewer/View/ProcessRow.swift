@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct ProcessRow: View {
+    var ps: ProcessStatus
     var process: Process
     
     var body: some View {
@@ -34,20 +35,18 @@ struct ProcessRow: View {
             Text("\(process.pid)")
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
-        }
-    }
-}
-
-var processes: [Process] = [
-    Process(pid: 1, user: "vmaster", cmd: "/bin/ls", pcpu: 1.4, pmem: 94.1),
-    Process(pid: 2, user: "vmaster", cmd: "/bin/cat", pcpu: 55.4, pmem: 45.5),
-    Process(pid: 3, user: "root", cmd: "/bin/usbmuxd", pcpu: 89.2, pmem: 10.1)
-]
-
-#Preview {
-    Group {
-        List(processes) { process in
-            ProcessRow(process: process)
+        }.swipeActions(allowsFullSwipe: false) {
+            Button {
+                self.ps.sendSignal(pid: process.pid, signal: "SIGKILL")
+            } label: {
+                Label("Kill", systemImage: "bolt.fill")
+            }.tint(.red)
+            
+            Button {
+                self.ps.sendSignal(pid: process.pid, signal: "SIGTERM")
+            } label: {
+                Label("Term", systemImage: "xmark")
+            }.tint(.orange)
         }
     }
 }
