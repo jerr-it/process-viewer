@@ -2,7 +2,7 @@
 //  ServerUserCreator.swift
 //  process-viewer
 //
-//  Created by vmaster on 10/21/23.
+//  Created by jerr-it on 10/21/23.
 //
 
 import SwiftUI
@@ -53,7 +53,7 @@ struct ServerUserCreator: View {
                     })
                 } else {
                     TextField("Hostname", text: $hostname)
-                    TextField("Port", text: $port)
+                    TextField("Port", text: $port).keyboardType(.numberPad)
                     Button("Done", systemImage: "checkmark", action: {() -> Void in
                         self.serverStore.addServer(server: Server(host: self.hostname, port: UInt16(self.port) ?? 22))
                     })
@@ -62,11 +62,19 @@ struct ServerUserCreator: View {
             Section(header: Text("List")) {
                 if page == Page.User {
                     List(self.userStore.userList) { user in
-                        Text(user.name)
+                        Text(user.name).swipeActions {
+                            Button("", systemImage: "xmark", action: {() -> Void in
+                                self.userStore.removeUser(user: user)
+                            }).tint(.red)
+                        }
                     }
                 } else {
                     List(self.serverStore.serverList) { server in
-                        Text("\(server.host):\(server.port)")
+                        Text("\(server.host):\(server.port)").swipeActions {
+                            Button("", systemImage: "xmark", action: {() -> Void in
+                                self.serverStore.removeServer(server: server)
+                            }).tint(.red)
+                        }
                     }
                 }
             }
