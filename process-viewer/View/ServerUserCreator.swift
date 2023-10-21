@@ -24,6 +24,8 @@ struct ServerUserCreator: View {
     @State var hostname: String
     @State var port: String
     
+    @State var displayWarning: Bool
+    
     init(serverStore: ServerStore, userStore: UserStore) {
         self._serverStore = StateObject(wrappedValue: serverStore)
         self._userStore = StateObject(wrappedValue: userStore)
@@ -34,6 +36,16 @@ struct ServerUserCreator: View {
         self.password = ""
         self.hostname = ""
         self.port = ""
+        
+        self.displayWarning = false
+    }
+    
+    func validateForm() -> Bool {
+        if self.page == Page.User {
+            return !self.username.isEmpty && !self.password.isEmpty
+        } else {
+            return !self.hostname.isEmpty && !self.port.isEmpty
+        }
     }
 
     var body: some View {
@@ -44,25 +56,53 @@ struct ServerUserCreator: View {
                         .tag(page)
                 }
             }.pickerStyle(.segmented)
-            Section(header: Text("Add")) {
+            Section(header: 
+                HStack {
+                    Text("Add")
+                    Spacer()
+                    if(self.displayWarning) {
+                        Text("Missing values").foregroundStyle(.red)
+                    }
+                }
+            ) {
                 if page == Page.User {
-                    TextField("Username", text: $username)
-                    SecureField("Password", text: $password)
+                    TextField("Username", text: $username).autocorrectionDisabled()
+                    SecureField("Password", text: $password).autocorrectionDisabled()
                     Button("Done", systemImage: "checkmark", action: {() -> Void in
-                        self.userStore.addUser(user: User(name: self.username, password: self.password))
+                        self.displayWarning = !validateForm()
+                        if !self.displayWarning {
+                            self.userStore.addUser(
+                                user: User(
+                                    name: self.username.trimmingCharacters(in: .whitespacesAndNewlines),
+                                    password: self.password.trimmingCharacters(in: .whitespacesAndNewlines)
+                                )
+                            )
+                            self.username = ""
+                            self.password = ""
+                        }
                     })
                 } else {
-                    TextField("Hostname", text: $hostname)
-                    TextField("Port", text: $port).keyboardType(.numberPad)
+                    TextField("Hostname", text: $hostname).autocorrectionDisabled()
+                    TextField("Port", text: $port).keyboardType(.numberPad).autocorrectionDisabled()
                     Button("Done", systemImage: "checkmark", action: {() -> Void in
-                        self.serverStore.addServer(server: Server(host: self.hostname, port: UInt16(self.port) ?? 22))
+                        self.displayWarning = !validateForm()
+                        if !self.displayWarning {
+                            self.serverStore.addServer(
+                                server: Server(
+                                    host: self.hostname.trimmingCharacters(in: .whitespacesAndNewlines),
+                                    port: UInt16(self.port) ?? 22
+                                )
+                            )
+                            self.hostname = ""
+                            self.port = ""
+                        }
                     })
                 }
             }
             Section(header: Text("List")) {
                 if page == Page.User {
                     List(self.userStore.userList) { user in
-                        Text(user.name).swipeActions {
+                        Text(verbatim: user.name).swipeActions {
                             Button("", systemImage: "xmark", action: {() -> Void in
                                 self.userStore.removeUser(user: user)
                             }).tint(.red)
@@ -70,7 +110,7 @@ struct ServerUserCreator: View {
                     }
                 } else {
                     List(self.serverStore.serverList) { server in
-                        Text("\(server.host):\(server.port)").swipeActions {
+                        Text(verbatim: "\(server.host):\(server.port)").swipeActions {
                             Button("", systemImage: "xmark", action: {() -> Void in
                                 self.serverStore.removeServer(server: server)
                             }).tint(.red)
