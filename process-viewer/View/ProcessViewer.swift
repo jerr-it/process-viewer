@@ -53,7 +53,7 @@ struct SSHStatus : View {
     var body: some View {
         HStack {
             Image(systemName: "server.rack")
-            Text("Status")
+            Text("\(ssh.server.host)")
             Spacer()
             Image(systemName: ssh.connected ? "checkmark" : "x.circle")
         }

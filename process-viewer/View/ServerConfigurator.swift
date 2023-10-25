@@ -37,6 +37,9 @@ struct ServerConfigurator : View {
                     NavigationLink("Processes") {
                         ProcessViewer(server: self.server, user: self.user)
                     }
+                    NavigationLink("Bluetooth") {
+                        BluetoothViewer(server: self.server, user: self.user)
+                    }
                 }
                 .toolbar {
                     NavigationLink(destination: ServerUserCreator(serverStore: self.serverStore, userStore: self.userStore)) {

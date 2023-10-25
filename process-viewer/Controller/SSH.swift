@@ -7,42 +7,72 @@
 
 import Foundation
 import SwiftUI
-import SSHClient
+import Citadel
+
+enum SSHError : Error {
+    case NotConnected
+}
 
 @MainActor class SSH : ObservableObject {
     @Published var connected: Bool
-    private var connection: SSHConnection
+    let server: Server
+    let user: User
+    var client: SSHClient?
     
     init(host: String, port: UInt16, username: String, password: String) {
-        self.connection = SSHConnection(
-            host: host,
-            port: port,
-            authentication: SSHAuthentication(
-                username: username,
-                method: .password(.init(password)),
-                hostKeyValidation: .acceptAll()
-            )
-        )
+        self.server = Server(host: host, port: port)
+        self.user = User(name: username, password: password)
         self.connected = false
-    }
-    
-    func connect() {
+        self.client = nil
+        
         Task() {
             do {
-                try await self.connection.start()
+                self.client = try await SSHClient.connect(
+                    host: "\(self.server.host)",
+                    authenticationMethod: .passwordBased(username: self.user.name, password: self.user.password),
+                    hostKeyValidator: .acceptAnything(),
+                    reconnect: .never
+                )
+                
                 self.connected = true
             } catch {
                 self.connected = false
             }
+        } 
+    }
+
+    func runSync(cmd: String) async throws -> String {
+        if !client!.isConnected {
+            self.connected = false
+            throw SSHError.NotConnected
         }
+        
+        let stdout = try await client!.executeCommand(cmd)
+        return String(buffer: stdout)
     }
     
-    func execute(cmd: String) async throws -> (Int, String, String) {
-        let response = try await self.connection.execute(SSHCommand(cmd))
-        return (
-            response.status.exitStatus,
-            String(decoding: response.standardOutput ?? Data(), as: UTF8.self),
-            String(decoding: response.errorOutput ?? Data(), as: UTF8.self)
-        )
+    func runAsync(cmd: String, onStdout: @escaping (String) -> Void, onStderr: @escaping (String) -> Void) async throws -> Task<Void, Error> {
+        if !client!.isConnected {
+            self.connected = false
+            throw SSHError.NotConnected
+        }
+        
+        return Task {
+            do {
+                let streams = try await self.client!.executeCommandStream(cmd)
+                var asyncStreams = streams.makeAsyncIterator()
+                
+                while let blob = try await asyncStreams.next() {
+                    switch blob {
+                    case .stdout(let stdout):
+                        onStdout(String(buffer: stdout))
+                    case .stderr(let stderr):
+                        onStderr(String(buffer: stderr))
+                    }
+                }
+            } catch {
+                print("Could not start async ssh command: \(error)")
+            }
+        }
     }
 }

@@ -15,17 +15,12 @@ import Foundation
     init(server: Server, user: User) {
         self.processes = []
         self.ssh = SSH(host: server.host, port: server.port, username: user.name, password: user.password)
-        self.ssh.connect()
     }
     
     func getProcesses() {
         Task() {
             do {
-                let (statusCode, stdout, stderr) = try await self.ssh.execute(cmd: "ps -eo pid,pcpu,pmem,user,cmd --no-headers")
-                if (statusCode != 0) {
-                    print(stderr)
-                }
-                
+                let stdout = try await self.ssh.runSync(cmd: "ps -eo pid,pcpu,pmem,user,cmd --no-headers")
                 self.processes = ProcessStatus.parse(stdout: stdout)
             } catch {
                 print(error)
@@ -36,12 +31,7 @@ import Foundation
     
     func sendSignal(pid: Int, signal: String) {
         Task() {
-            let (statusCode, _, stderr) = try await self.ssh.execute(cmd: "kill -s \(signal) \(pid)")
-            if (statusCode != 0) {
-                print(stderr)
-                return
-            }
-            
+            let stdout = try await self.ssh.runSync(cmd: "kill -s \(signal) \(pid)")
             self.getProcesses()
         }
     }

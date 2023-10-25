@@ -7,8 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E0294DF12AE95DFF00DAE2CB /* BluetoothViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0294DF02AE95DFF00DAE2CB /* BluetoothViewer.swift */; };
+		E0294DF32AE95F8B00DAE2CB /* BluetoothCtl.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0294DF22AE95F8B00DAE2CB /* BluetoothCtl.swift */; };
+		E0294DF62AE9659E00DAE2CB /* Citadel in Frameworks */ = {isa = PBXBuildFile; productRef = E0294DF52AE9659E00DAE2CB /* Citadel */; };
 		E0376B412ADC928F0080635A /* SSH.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0376B402ADC928F0080635A /* SSH.swift */; };
-		E04503842ADDC9D7003DAF4E /* SSHClient in Frameworks */ = {isa = PBXBuildFile; productRef = E04503832ADDC9D7003DAF4E /* SSHClient */; };
 		E0465D812AE1C9C3003DF998 /* ServerConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0465D802AE1C9C3003DF998 /* ServerConfigurator.swift */; };
 		E0465D832AE1D172003DF998 /* ProcessViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0465D822AE1D172003DF998 /* ProcessViewer.swift */; };
 		E0465D852AE1D9FA003DF998 /* ProcessStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0465D842AE1D9FA003DF998 /* ProcessStatus.swift */; };
@@ -46,6 +48,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		E0294DF02AE95DFF00DAE2CB /* BluetoothViewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothViewer.swift; sourceTree = "<group>"; };
+		E0294DF22AE95F8B00DAE2CB /* BluetoothCtl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothCtl.swift; sourceTree = "<group>"; };
 		E0376B402ADC928F0080635A /* SSH.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SSH.swift; sourceTree = "<group>"; };
 		E0465D802AE1C9C3003DF998 /* ServerConfigurator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerConfigurator.swift; sourceTree = "<group>"; };
 		E0465D822AE1D172003DF998 /* ProcessViewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessViewer.swift; sourceTree = "<group>"; };
@@ -74,7 +78,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E057C4BE2AE4338D002B55E4 /* KeychainAccess in Frameworks */,
-				E04503842ADDC9D7003DAF4E /* SSHClient in Frameworks */,
+				E0294DF62AE9659E00DAE2CB /* Citadel in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -102,6 +106,7 @@
 				E0465D842AE1D9FA003DF998 /* ProcessStatus.swift */,
 				E057C4B82AE42CD9002B55E4 /* ServerStore.swift */,
 				E057C4BA2AE432EB002B55E4 /* UserStore.swift */,
+				E0294DF22AE95F8B00DAE2CB /* BluetoothCtl.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -181,6 +186,7 @@
 				E0465D802AE1C9C3003DF998 /* ServerConfigurator.swift */,
 				E0465D822AE1D172003DF998 /* ProcessViewer.swift */,
 				E057C4C12AE43B16002B55E4 /* ServerUserCreator.swift */,
+				E0294DF02AE95DFF00DAE2CB /* BluetoothViewer.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -202,8 +208,8 @@
 			);
 			name = "process-viewer";
 			packageProductDependencies = (
-				E04503832ADDC9D7003DAF4E /* SSHClient */,
 				E057C4BD2AE4338D002B55E4 /* KeychainAccess */,
+				E0294DF52AE9659E00DAE2CB /* Citadel */,
 			);
 			productName = "process-viewer";
 			productReference = E049EDA62ADC1465000CF599 /* process-viewer.app */;
@@ -278,8 +284,8 @@
 			);
 			mainGroup = E049ED9D2ADC1465000CF599;
 			packageReferences = (
-				E04503822ADDC9D7003DAF4E /* XCRemoteSwiftPackageReference "swift-ssh-client" */,
 				E057C4BC2AE4338D002B55E4 /* XCRemoteSwiftPackageReference "KeychainAccess" */,
+				E0294DF42AE9659E00DAE2CB /* XCRemoteSwiftPackageReference "Citadel" */,
 			);
 			productRefGroup = E049EDA72ADC1465000CF599 /* Products */;
 			projectDirPath = "";
@@ -325,7 +331,9 @@
 			files = (
 				E057C4C22AE43B16002B55E4 /* ServerUserCreator.swift in Sources */,
 				E0465D852AE1D9FA003DF998 /* ProcessStatus.swift in Sources */,
+				E0294DF12AE95DFF00DAE2CB /* BluetoothViewer.swift in Sources */,
 				E057C4BB2AE432EB002B55E4 /* UserStore.swift in Sources */,
+				E0294DF32AE95F8B00DAE2CB /* BluetoothCtl.swift in Sources */,
 				E049EDAA2ADC1465000CF599 /* process_viewerApp.swift in Sources */,
 				E0465D832AE1D172003DF998 /* ProcessViewer.swift in Sources */,
 				E0F46BC12ADC33F700BB1A87 /* ProcessRow.swift in Sources */,
@@ -666,12 +674,12 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		E04503822ADDC9D7003DAF4E /* XCRemoteSwiftPackageReference "swift-ssh-client" */ = {
+		E0294DF42AE9659E00DAE2CB /* XCRemoteSwiftPackageReference "Citadel" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/gaetanzanella/swift-ssh-client.git";
+			repositoryURL = "https://github.com/orlandos-nl/Citadel.git";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 0.1.4;
+				minimumVersion = 0.7.0;
 			};
 		};
 		E057C4BC2AE4338D002B55E4 /* XCRemoteSwiftPackageReference "KeychainAccess" */ = {
@@ -685,10 +693,10 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		E04503832ADDC9D7003DAF4E /* SSHClient */ = {
+		E0294DF52AE9659E00DAE2CB /* Citadel */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = E04503822ADDC9D7003DAF4E /* XCRemoteSwiftPackageReference "swift-ssh-client" */;
-			productName = SSHClient;
+			package = E0294DF42AE9659E00DAE2CB /* XCRemoteSwiftPackageReference "Citadel" */;
+			productName = Citadel;
 		};
 		E057C4BD2AE4338D002B55E4 /* KeychainAccess */ = {
 			isa = XCSwiftPackageProductDependency;
