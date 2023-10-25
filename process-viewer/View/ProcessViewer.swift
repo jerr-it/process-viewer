@@ -51,7 +51,8 @@ struct SSHStatus : View {
             Image(systemName: "server.rack")
             Text("\(ssh.server.host)")
             Spacer()
-            Image(systemName: ssh.connected ? "checkmark" : "x.circle")
+            Image(systemName: self.ssh.connected ? "checkmark.circle" : "x.circle")
+                .foregroundColor(self.ssh.connected ? .green : .red)
         }
     }
 }
