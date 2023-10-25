@@ -11,7 +11,7 @@ import SwiftUI
 struct process_viewerApp: App {
     var body: some Scene {
         WindowGroup {
-            ServerConfigurator()
+            MainPage()
         }
     }
 }

@@ -15,30 +15,34 @@ enum SSHError : Error {
 
 @MainActor class SSH : ObservableObject {
     @Published var connected: Bool
-    let server: Server
-    let user: User
+    @Published var server: Server
+    @Published var user: User
     var client: SSHClient?
     
-    init(host: String, port: UInt16, username: String, password: String) {
-        self.server = Server(host: host, port: port)
-        self.user = User(name: username, password: password)
+    init() {
+        self.server = Server()
+        self.user = User()
         self.connected = false
-        self.client = nil
-        
+    }
+    
+    func connect(server: Server, user: User) {
         Task() {
             do {
                 self.client = try await SSHClient.connect(
-                    host: "\(self.server.host)",
-                    authenticationMethod: .passwordBased(username: self.user.name, password: self.user.password),
+                    host: "\(server.host)",
+                    authenticationMethod: .passwordBased(username: user.name, password: user.password),
                     hostKeyValidator: .acceptAnything(),
                     reconnect: .never
                 )
                 
                 self.connected = true
+                self.server = server
+                self.user = user
             } catch {
                 self.connected = false
+                print("Could not connect: \(error)")
             }
-        } 
+        }
     }
 
     func runSync(cmd: String) async throws -> String {
@@ -51,7 +55,7 @@ enum SSHError : Error {
         return String(buffer: stdout)
     }
     
-    func runAsync(cmd: String, onStdout: @escaping (String) -> Void, onStderr: @escaping (String) -> Void) async throws -> Task<Void, Error> {
+    func runAsync(cmd: String, onStdout: @escaping (String) throws -> Void, onStderr: @escaping (String) throws -> Void) throws -> Task<Void, Error> {
         if !client!.isConnected {
             self.connected = false
             throw SSHError.NotConnected
@@ -65,9 +69,9 @@ enum SSHError : Error {
                 while let blob = try await asyncStreams.next() {
                     switch blob {
                     case .stdout(let stdout):
-                        onStdout(String(buffer: stdout))
+                        try onStdout(String(buffer: stdout))
                     case .stderr(let stderr):
-                        onStderr(String(buffer: stderr))
+                        try onStderr(String(buffer: stderr))
                     }
                 }
             } catch {

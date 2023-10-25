@@ -7,14 +7,15 @@
 // Abstracts the ps utility
 
 import Foundation
+import SwiftUI
 
 @MainActor class ProcessStatus : ObservableObject {
     @Published var ssh: SSH
-    @Published var processes: [Process]
+    @Published var processes: [Process] = []
     
-    init(server: Server, user: User) {
+    init(ssh: SSH) {
+        self.ssh = ssh
         self.processes = []
-        self.ssh = SSH(host: server.host, port: server.port, username: user.name, password: user.password)
     }
     
     func getProcesses() {
@@ -31,7 +32,7 @@ import Foundation
     
     func sendSignal(pid: Int, signal: String) {
         Task() {
-            let stdout = try await self.ssh.runSync(cmd: "kill -s \(signal) \(pid)")
+            let _ = try await self.ssh.runSync(cmd: "kill -s \(signal) \(pid)")
             self.getProcesses()
         }
     }

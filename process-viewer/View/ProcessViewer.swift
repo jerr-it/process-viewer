@@ -13,10 +13,6 @@ struct ProcessViewer : View {
     @StateObject var ps: ProcessStatus
     @State var filterStr: String = ""
     
-    init(server: Server, user: User) {
-        self._ps = StateObject(wrappedValue: ProcessStatus(server: server, user: user))
-    }
-    
     var body: some View {
         Form {
             Section(header: Text("Status")) {

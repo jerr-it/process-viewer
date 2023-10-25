@@ -9,12 +9,13 @@ import Foundation
 import SwiftUI
 
 
-struct ServerConfigurator : View {
+struct MainPage : View {
     @StateObject var serverStore = ServerStore()
     @StateObject var userStore = UserStore()
     
     @State var server: Server = Server()
     @State var user: User = User()
+    @StateObject var ssh: SSH = SSH()
     
     var body: some View {
         NavigationView {
@@ -32,14 +33,19 @@ struct ServerConfigurator : View {
                                 .tag(usr)
                         }
                     }
+                    Button(self.ssh.connected ? "Connected" : "Connect", systemImage: self.ssh.connected ? "checkmark.icloud.fill" : "icloud.fill", action: {() -> Void in
+                        self.ssh.connect(server: server, user: user)
+                    })
+                        .disabled(self.ssh.connected)
+                        .foregroundColor(self.ssh.connected ? .green : .white)
                 }
                 Section(header: Text("Utils")) {
                     NavigationLink("Processes") {
-                        ProcessViewer(server: self.server, user: self.user)
-                    }
+                        ProcessViewer(ps: ProcessStatus(ssh: ssh)).disabled(!self.ssh.connected)
+                    }.disabled(!self.ssh.connected)
                     NavigationLink("Bluetooth") {
-                        BluetoothViewer(server: self.server, user: self.user)
-                    }
+                        BluetoothViewer(btCtl: BluetoothCtl(ssh: ssh)).disabled(!self.ssh.connected)
+                    }.disabled(!self.ssh.connected)
                 }
                 .toolbar {
                     NavigationLink(destination: ServerUserCreator(serverStore: self.serverStore, userStore: self.userStore)) {

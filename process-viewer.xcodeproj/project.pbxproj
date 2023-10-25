@@ -11,7 +11,7 @@
 		E0294DF32AE95F8B00DAE2CB /* BluetoothCtl.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0294DF22AE95F8B00DAE2CB /* BluetoothCtl.swift */; };
 		E0294DF62AE9659E00DAE2CB /* Citadel in Frameworks */ = {isa = PBXBuildFile; productRef = E0294DF52AE9659E00DAE2CB /* Citadel */; };
 		E0376B412ADC928F0080635A /* SSH.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0376B402ADC928F0080635A /* SSH.swift */; };
-		E0465D812AE1C9C3003DF998 /* ServerConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0465D802AE1C9C3003DF998 /* ServerConfigurator.swift */; };
+		E0465D812AE1C9C3003DF998 /* MainPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0465D802AE1C9C3003DF998 /* MainPage.swift */; };
 		E0465D832AE1D172003DF998 /* ProcessViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0465D822AE1D172003DF998 /* ProcessViewer.swift */; };
 		E0465D852AE1D9FA003DF998 /* ProcessStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0465D842AE1D9FA003DF998 /* ProcessStatus.swift */; };
 		E047EB3D2ADF06D30027DA72 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = E047EB3C2ADF06D30027DA72 /* User.swift */; };
@@ -22,6 +22,7 @@
 		E049EDBB2ADC1466000CF599 /* process_viewerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E049EDBA2ADC1466000CF599 /* process_viewerTests.swift */; };
 		E049EDC52ADC1466000CF599 /* process_viewerUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E049EDC42ADC1466000CF599 /* process_viewerUITests.swift */; };
 		E049EDC72ADC1466000CF599 /* process_viewerUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E049EDC62ADC1466000CF599 /* process_viewerUITestsLaunchTests.swift */; };
+		E04C9D182AE983A600EB69AD /* BTDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = E04C9D172AE983A600EB69AD /* BTDevice.swift */; };
 		E057C4B92AE42CD9002B55E4 /* ServerStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = E057C4B82AE42CD9002B55E4 /* ServerStore.swift */; };
 		E057C4BB2AE432EB002B55E4 /* UserStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = E057C4BA2AE432EB002B55E4 /* UserStore.swift */; };
 		E057C4BE2AE4338D002B55E4 /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = E057C4BD2AE4338D002B55E4 /* KeychainAccess */; };
@@ -51,7 +52,7 @@
 		E0294DF02AE95DFF00DAE2CB /* BluetoothViewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothViewer.swift; sourceTree = "<group>"; };
 		E0294DF22AE95F8B00DAE2CB /* BluetoothCtl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothCtl.swift; sourceTree = "<group>"; };
 		E0376B402ADC928F0080635A /* SSH.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SSH.swift; sourceTree = "<group>"; };
-		E0465D802AE1C9C3003DF998 /* ServerConfigurator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerConfigurator.swift; sourceTree = "<group>"; };
+		E0465D802AE1C9C3003DF998 /* MainPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainPage.swift; sourceTree = "<group>"; };
 		E0465D822AE1D172003DF998 /* ProcessViewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessViewer.swift; sourceTree = "<group>"; };
 		E0465D842AE1D9FA003DF998 /* ProcessStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessStatus.swift; sourceTree = "<group>"; };
 		E047EB3C2ADF06D30027DA72 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
@@ -65,6 +66,7 @@
 		E049EDC02ADC1466000CF599 /* process-viewerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "process-viewerUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E049EDC42ADC1466000CF599 /* process_viewerUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = process_viewerUITests.swift; sourceTree = "<group>"; };
 		E049EDC62ADC1466000CF599 /* process_viewerUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = process_viewerUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		E04C9D172AE983A600EB69AD /* BTDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BTDevice.swift; sourceTree = "<group>"; };
 		E057C4B82AE42CD9002B55E4 /* ServerStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerStore.swift; sourceTree = "<group>"; };
 		E057C4BA2AE432EB002B55E4 /* UserStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserStore.swift; sourceTree = "<group>"; };
 		E057C4C12AE43B16002B55E4 /* ServerUserCreator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerUserCreator.swift; sourceTree = "<group>"; };
@@ -175,6 +177,7 @@
 				E0F46BBD2ADC323A00BB1A87 /* Process.swift */,
 				E047EB3C2ADF06D30027DA72 /* User.swift */,
 				E047EB3E2ADF06FA0027DA72 /* Server.swift */,
+				E04C9D172AE983A600EB69AD /* BTDevice.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -183,7 +186,7 @@
 			isa = PBXGroup;
 			children = (
 				E0F46BC02ADC33F700BB1A87 /* ProcessRow.swift */,
-				E0465D802AE1C9C3003DF998 /* ServerConfigurator.swift */,
+				E0465D802AE1C9C3003DF998 /* MainPage.swift */,
 				E0465D822AE1D172003DF998 /* ProcessViewer.swift */,
 				E057C4C12AE43B16002B55E4 /* ServerUserCreator.swift */,
 				E0294DF02AE95DFF00DAE2CB /* BluetoothViewer.swift */,
@@ -330,6 +333,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E057C4C22AE43B16002B55E4 /* ServerUserCreator.swift in Sources */,
+				E04C9D182AE983A600EB69AD /* BTDevice.swift in Sources */,
 				E0465D852AE1D9FA003DF998 /* ProcessStatus.swift in Sources */,
 				E0294DF12AE95DFF00DAE2CB /* BluetoothViewer.swift in Sources */,
 				E057C4BB2AE432EB002B55E4 /* UserStore.swift in Sources */,
@@ -339,7 +343,7 @@
 				E0F46BC12ADC33F700BB1A87 /* ProcessRow.swift in Sources */,
 				E057C4B92AE42CD9002B55E4 /* ServerStore.swift in Sources */,
 				E0376B412ADC928F0080635A /* SSH.swift in Sources */,
-				E0465D812AE1C9C3003DF998 /* ServerConfigurator.swift in Sources */,
+				E0465D812AE1C9C3003DF998 /* MainPage.swift in Sources */,
 				E0F46BBE2ADC323A00BB1A87 /* Process.swift in Sources */,
 				E047EB3F2ADF06FA0027DA72 /* Server.swift in Sources */,
 				E047EB3D2ADF06D30027DA72 /* User.swift in Sources */,
