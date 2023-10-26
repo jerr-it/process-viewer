@@ -173,6 +173,24 @@
 			path = "process-viewerUITests";
 			sourceTree = "<group>";
 		};
+		E05D031E2AEB154400DFC457 /* Process */ = {
+			isa = PBXGroup;
+			children = (
+				E0465D822AE1D172003DF998 /* ProcessViewer.swift */,
+				E0F46BC02ADC33F700BB1A87 /* ProcessRow.swift */,
+			);
+			path = Process;
+			sourceTree = "<group>";
+		};
+		E05D031F2AEB157B00DFC457 /* Bluetooth */ = {
+			isa = PBXGroup;
+			children = (
+				E05D031C2AEB0DE200DFC457 /* BTDeviceRow.swift */,
+				E0294DF02AE95DFF00DAE2CB /* BluetoothViewer.swift */,
+			);
+			path = Bluetooth;
+			sourceTree = "<group>";
+		};
 		E0F46BBC2ADC322C00BB1A87 /* Model */ = {
 			isa = PBXGroup;
 			children = (
@@ -187,12 +205,10 @@
 		E0F46BBF2ADC33E400BB1A87 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				E0F46BC02ADC33F700BB1A87 /* ProcessRow.swift */,
+				E05D031F2AEB157B00DFC457 /* Bluetooth */,
+				E05D031E2AEB154400DFC457 /* Process */,
 				E0465D802AE1C9C3003DF998 /* MainPage.swift */,
-				E0465D822AE1D172003DF998 /* ProcessViewer.swift */,
 				E057C4C12AE43B16002B55E4 /* ServerUserCreator.swift */,
-				E0294DF02AE95DFF00DAE2CB /* BluetoothViewer.swift */,
-				E05D031C2AEB0DE200DFC457 /* BTDeviceRow.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
