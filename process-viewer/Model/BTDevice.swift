@@ -7,7 +7,7 @@
 
 import Foundation
 
-let REGEX_TEMPLATE: String = "/@: (.+)/"
+let REGEX_TEMPLATE: String = "(?<=@: ).+"
 
 struct BTDevice : Identifiable, Hashable {
     let id: UUID

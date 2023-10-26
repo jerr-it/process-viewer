@@ -68,4 +68,31 @@ class BluetoothCtl : ObservableObject {
             self.scanTaskHandle = nil
         }
     }
+    
+    func getBTDevices() {
+        Task.detached { @MainActor in
+            var devices: [BTDevice] = []
+            do {
+                let stdout = try await self.ssh.runSync(cmd: "bluetoothctl devices")
+                let lines = stdout.split(separator: "\n")
+                for line in lines {
+                    if line.isEmpty {
+                        continue
+                    }
+                    
+                    let components = line.split(separator: " ")
+                    if String(components[1]).replacingOccurrences(of: ":", with: "-") == components[2] {
+                        continue
+                    }
+                    
+                    let devStdout = try await self.ssh.runSync(cmd: "bluetoothctl info \(components[1])")
+
+                    devices.append(BTDevice(output: devStdout))
+                }
+            } catch {
+                print("Could not fetch devices: \(stdout)")
+            }
+            self.btDevices = devices
+        }
+    }
 }

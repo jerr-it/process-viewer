@@ -10,16 +10,11 @@ import SwiftUI
 
 struct BluetoothViewer: View {
     @StateObject var btCtl: BluetoothCtl
+    let timer = Timer.publish(every: 2, tolerance: 0.5, on: .main, in: .common).autoconnect()
     
     var body: some View {
         Form {
-            Section(header: HStack {
-                Text("Status")
-                Spacer()
-                if (self.btCtl.scanTaskHandle != nil) {
-                    ProgressView()
-                }
-            }) {
+            Section(header: Text("Status")) {
                 SSHStatus(ssh: btCtl.ssh)
                 HStack {
                     Image(systemName: "b.circle")
@@ -29,6 +24,17 @@ struct BluetoothViewer: View {
                         .foregroundColor(self.btCtl.isAvailable ? .green : .red)
                 }
             }
+            Section(header: HStack {
+                Text("Devices")
+                Spacer()
+                if (self.btCtl.scanTaskHandle != nil) {
+                    ProgressView()
+                }
+            }) {
+                List(self.btCtl.btDevices) { device in
+                    BTDeviceRow(device: device)
+                }
+            }
         }
             .navigationTitle("Bluetooth")
             .onAppear {
@@ -36,7 +42,11 @@ struct BluetoothViewer: View {
                 self.btCtl.scanOn()
             }
             .onDisappear {
+                timer.upstream.connect().cancel()
                 self.btCtl.scanOff()
+            }
+            .onReceive(timer) { time in
+                self.btCtl.getBTDevices()
             }
     }
 }
