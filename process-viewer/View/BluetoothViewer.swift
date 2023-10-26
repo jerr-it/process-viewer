@@ -13,7 +13,13 @@ struct BluetoothViewer: View {
     
     var body: some View {
         Form {
-            Section(header: Text("Status")) {
+            Section(header: HStack {
+                Text("Status")
+                Spacer()
+                if (self.btCtl.scanTaskHandle != nil) {
+                    ProgressView()
+                }
+            }) {
                 SSHStatus(ssh: btCtl.ssh)
                 HStack {
                     Image(systemName: "b.circle")
@@ -27,6 +33,10 @@ struct BluetoothViewer: View {
             .navigationTitle("Bluetooth")
             .onAppear {
                 self.btCtl.checkBTAvailable()
+                self.btCtl.scanOn()
+            }
+            .onDisappear {
+                self.btCtl.scanOff()
             }
     }
 }
