@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-@MainActor class BluetoothCtl : ObservableObject {
+class BluetoothCtl : ObservableObject {
     @Published var ssh: SSH
     @Published var isAvailable: Bool
     @Published var btDevices: [BTDevice]
@@ -20,8 +20,8 @@ import SwiftUI
         self.btDevices = []
     }
     
-    func isBluetoothAvailable() {
-        Task() {
+    func checkBTAvailable() {
+        Task.detached { @MainActor in
             do {
                 let stdout = try await self.ssh.runSync(cmd: "bluetoothctl show")
                 
@@ -46,6 +46,13 @@ import SwiftUI
     }
     
     func scanOff() {
-        self.scanTaskHandle?.cancel()
+        Task.detached { @MainActor in
+            do {
+                let _ = try await self.ssh.runSync(cmd: "pkill -f 'bluetoothctl scan on'")
+            } catch {
+                print("Error when trying to disable scanning: \(error)")
+            }
+            self.scanTaskHandle?.cancel()
+        }
     }
 }

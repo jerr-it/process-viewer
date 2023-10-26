@@ -26,7 +26,7 @@ struct BluetoothViewer: View {
         }
             .navigationTitle("Bluetooth")
             .onAppear {
-                self.btCtl.isBluetoothAvailable()
+                self.btCtl.checkBTAvailable()
             }
     }
 }

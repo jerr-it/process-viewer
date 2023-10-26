@@ -9,7 +9,7 @@
 import Foundation
 import SwiftUI
 
-@MainActor class ProcessStatus : ObservableObject {
+class ProcessStatus : ObservableObject {
     @Published var ssh: SSH
     @Published var processes: [Process] = []
     
@@ -19,7 +19,7 @@ import SwiftUI
     }
     
     func getProcesses() {
-        Task() {
+        Task.detached { @MainActor in
             do {
                 let stdout = try await self.ssh.runSync(cmd: "ps -eo pid,pcpu,pmem,user,cmd --no-headers")
                 self.processes = ProcessStatus.parse(stdout: stdout)
@@ -31,7 +31,7 @@ import SwiftUI
     }
     
     func sendSignal(pid: Int, signal: String) {
-        Task() {
+        Task.detached { @MainActor in
             let _ = try await self.ssh.runSync(cmd: "kill -s \(signal) \(pid)")
             self.getProcesses()
         }

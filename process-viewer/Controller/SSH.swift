@@ -13,20 +13,22 @@ enum SSHError : Error {
     case NotConnected
 }
 
-@MainActor class SSH : ObservableObject {
+class SSH : ObservableObject {
     @Published var connected: Bool
     @Published var server: Server
     @Published var user: User
+    var onDisconnectActions: [() -> Void]
     var client: SSHClient?
     
     init() {
         self.server = Server()
         self.user = User()
         self.connected = false
+        self.onDisconnectActions = []
     }
     
     func connect(server: Server, user: User) {
-        Task() {
+        Task.detached { @MainActor in
             do {
                 self.client = try await SSHClient.connect(
                     host: "\(server.host)",
@@ -34,6 +36,12 @@ enum SSHError : Error {
                     hostKeyValidator: .acceptAnything(),
                     reconnect: .never
                 )
+                
+                self.client!.onDisconnect {
+                    for action in self.onDisconnectActions {
+                        action()
+                    }
+                }
                 
                 self.connected = true
                 self.server = server
@@ -43,6 +51,10 @@ enum SSHError : Error {
                 print("Could not connect: \(error)")
             }
         }
+    }
+    
+    func onDisconnect(action: @escaping () -> Void) {
+        self.onDisconnectActions.append(action)
     }
 
     func runSync(cmd: String) async throws -> String {
@@ -61,7 +73,7 @@ enum SSHError : Error {
             throw SSHError.NotConnected
         }
         
-        return Task {
+        return Task.detached { @MainActor in
             do {
                 let streams = try await self.client!.executeCommandStream(cmd)
                 var asyncStreams = streams.makeAsyncIterator()
