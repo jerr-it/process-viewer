@@ -7,10 +7,15 @@
 
 import Foundation
 import SwiftUI
+import Combine
+
+let SCAN_ON_INTERVAL: Int = 10
+let GET_DEVICES_INTERVAL: Int = 3
 
 struct BluetoothViewer: View {
     @StateObject var btCtl: BluetoothCtl
-    let timer = Timer.publish(every: 2, tolerance: 0.5, on: .main, in: .common).autoconnect()
+    @State private var getDevicesTimer = Timer.publish(every: Double(GET_DEVICES_INTERVAL), on: .main, in: .common).autoconnect()
+    @State private var scanOnTimer = Timer.publish(every: Double(SCAN_ON_INTERVAL), on: .main, in: .common).autoconnect()
     
     var body: some View {
         Form {
@@ -38,15 +43,24 @@ struct BluetoothViewer: View {
         }
             .navigationTitle("Bluetooth")
             .onAppear {
-                self.btCtl.checkBTAvailable()
-                self.btCtl.scanOn()
+                self.btCtl.checkBTAvailable {
+                    self.btCtl.scanOn(timeout: SCAN_ON_INTERVAL)
+                }
             }
             .onDisappear {
-                timer.upstream.connect().cancel()
                 self.btCtl.scanOff()
+                self.scanOnTimer.upstream.connect().cancel()
+                self.getDevicesTimer.upstream.connect().cancel()
             }
-            .onReceive(timer) { time in
-                self.btCtl.getBTDevices()
+            .onReceive(scanOnTimer) { time in
+                if self.btCtl.isAvailable {
+                    self.btCtl.scanOn(timeout: SCAN_ON_INTERVAL)
+                }
+            }
+            .onReceive(getDevicesTimer) { time in
+                if self.btCtl.isAvailable {
+                    self.btCtl.getBTDevices()
+                }
             }
     }
 }

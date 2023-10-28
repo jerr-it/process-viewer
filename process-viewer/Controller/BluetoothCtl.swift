@@ -20,7 +20,7 @@ class BluetoothCtl : ObservableObject {
         self.btDevices = []
     }
     
-    func checkBTAvailable() {
+    func checkBTAvailable(then: Optional<() -> Void>) {
         Task.detached { @MainActor in
             do {
                 let stdout = try await self.ssh.runSync(cmd: "bluetoothctl show")
@@ -28,7 +28,12 @@ class BluetoothCtl : ObservableObject {
                 self.isAvailable = !stdout.contains("No default controller available")
                 
                 if self.isAvailable {
-                    self.scanOn()
+                    switch then {
+                    case .some(let fn):
+                        fn()
+                    case .none:
+                        break
+                    }
                 }
             } catch {
                 print("Could not run command: \(error)")
@@ -37,13 +42,13 @@ class BluetoothCtl : ObservableObject {
         }
     }
     
-    func scanOn() {
+    func scanOn(timeout: Int) {
         if !self.isAvailable {
             return
         }
         
         do {
-            self.scanTaskHandle = try self.ssh.runAsync(cmd: "bluetoothctl scan on") { stdout in
+            self.scanTaskHandle = try self.ssh.runAsync(cmd: "bluetoothctl --timeout \(timeout) scan on") { stdout in
                 print("Stdout: \(stdout)")
             } onStderr: { stderr in
                 print("Stderr: \(stderr)")
@@ -60,7 +65,7 @@ class BluetoothCtl : ObservableObject {
         
         Task.detached { @MainActor in
             do {
-                let _ = try await self.ssh.runSync(cmd: "pkill -f 'bluetoothctl scan on'")
+                let _ = try await self.ssh.runSync(cmd: "pkill -f 'bluetoothctl'")
             } catch {
                 print("Error when trying to disable scanning: \(error)")
             }
