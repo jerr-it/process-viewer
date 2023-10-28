@@ -2,7 +2,7 @@
 //  BTDeviceRow.swift
 //  process-viewer
 //
-//  Created by vmaster on 10/26/23.
+//  Created by jerr-it on 10/26/23.
 //
 
 import SwiftUI
@@ -29,12 +29,23 @@ let ICON_MAP: Dictionary<String, String> = [
 ]
 
 struct BTDeviceRow: View {
-    var device: BTDevice
+    @StateObject var device: BTDevice
+    @StateObject var btCtl: BluetoothCtl
     
     var body: some View {
         HStack {
             Image(systemName: ICON_MAP[device.icon] ?? "questionmark")
             Text("\(device.name)")
+            Spacer()
+            if self.device.connecting {
+                ProgressView()
+            }
+        }.swipeActions {
+            Button("", systemImage: "personalhotspot") {
+                if !device.connected {
+                    self.btCtl.connectDevice(device: self.device)
+                }
+            }.tint(device.connected ? .red : .green)
         }
     }
 }

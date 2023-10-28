@@ -49,9 +49,7 @@ class BluetoothCtl : ObservableObject {
         
         do {
             self.scanTaskHandle = try self.ssh.runAsync(cmd: "bluetoothctl --timeout \(timeout) scan on") { stdout in
-                print("Stdout: \(stdout)")
             } onStderr: { stderr in
-                print("Stderr: \(stderr)")
             }
         } catch {
             print("Error when starting async ssh: \(error)")
@@ -86,18 +84,39 @@ class BluetoothCtl : ObservableObject {
                     }
                     
                     let components = line.split(separator: " ")
-                    if String(components[1]).replacingOccurrences(of: ":", with: "-") == components[2] {
+                    let macAddress = String(components[1])
+                    if macAddress.replacingOccurrences(of: ":", with: "-") == components[2] {
                         continue
                     }
                     
                     let devStdout = try await self.ssh.runSync(cmd: "bluetoothctl info \(components[1])")
 
-                    devices.append(BTDevice(output: devStdout))
+                    devices.append(BTDevice(output: devStdout, mac: macAddress))
                 }
             } catch {
                 print("Could not fetch devices: \(stdout)")
             }
             self.btDevices = devices
+        }
+    }
+    
+    func connectDevice(device: BTDevice) {
+        Task.detached { @MainActor in
+            do {
+                device.connecting = true
+                print("start connecting")
+                let _ = try self.ssh.runAsync(cmd: "bluetoothctl connect \(device.mac)") { stdout in
+                    if stdout.contains("Connection successful") {
+                        device.connected = true
+                        self.btDevices = self.btDevices
+                    }
+                    device.connecting = false
+                } onStderr: { stderr in
+                    device.connecting = false
+                }
+            } catch {
+                print("Unable to connect to device \(device.name) \(device.mac): \(error)")
+            }
         }
     }
 }

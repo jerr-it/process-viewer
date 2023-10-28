@@ -9,23 +9,37 @@ import Foundation
 
 let REGEX_TEMPLATE: String = "(?<=@: ).+"
 
-struct BTDevice : Identifiable, Hashable {
+class BTDevice : ObservableObject, Identifiable, Hashable {
+    static func == (lhs: BTDevice, rhs: BTDevice) -> Bool {
+        return lhs.mac == rhs.mac
+    }
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(mac)
+    }
+    
+    @Published var connecting: Bool
+    
     let id: UUID
     
-    var name: String
-    var alias: String
+    let mac: String
     
-    var dClass: String
-    var icon: String
+    let name: String
+    let alias: String
     
-    var paired: Bool
-    var bonded: Bool
-    var trusted: Bool
-    var blocked: Bool
-    var connected: Bool
+    let dClass: String
+    let icon: String
     
-    init(output: String) {
+    @Published var paired: Bool
+    @Published var bonded: Bool
+    @Published var trusted: Bool
+    @Published var blocked: Bool
+    @Published var connected: Bool
+    
+    init(output: String, mac: String) {
         self.id = UUID()
+        self.mac = mac
+        self.connecting = false
         if let range = output.range(of: REGEX_TEMPLATE.replacingOccurrences(of: "@", with: "Name"), options: .regularExpression) {
             self.name = String(output[range])
         } else { self.name = "" }

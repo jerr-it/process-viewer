@@ -30,14 +30,30 @@ struct BluetoothViewer: View {
                 }
             }
             Section(header: HStack {
-                Text("Devices")
+                Text("Connected")
                 Spacer()
                 if (self.btCtl.scanTaskHandle != nil) {
                     ProgressView()
                 }
             }) {
                 List(self.btCtl.btDevices) { device in
-                    BTDeviceRow(device: device)
+                    if device.connected {
+                        BTDeviceRow(device: device, btCtl: self.btCtl)
+                    }
+                }
+            }
+            Section(header: Text("Paired")) {
+                List(self.btCtl.btDevices) { device in
+                    if !device.connected && device.paired {
+                        BTDeviceRow(device: device, btCtl: self.btCtl)
+                    }
+                }
+            }
+            Section(header: Text("Other")) {
+                List(self.btCtl.btDevices) { device in
+                    if !device.connected && !device.paired {
+                        BTDeviceRow(device: device, btCtl: self.btCtl)
+                    }
                 }
             }
         }
