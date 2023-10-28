@@ -2,7 +2,7 @@
 //  BTDevice.swift
 //  process-viewer
 //
-//  Created by vmaster on 10/25/23.
+//  Created by jerr-it on 10/25/23.
 //
 
 import Foundation

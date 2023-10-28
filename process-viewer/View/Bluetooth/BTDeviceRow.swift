@@ -39,13 +39,23 @@ struct BTDeviceRow: View {
             Spacer()
             if self.device.connecting {
                 ProgressView()
-            }
-        }.swipeActions {
-            Button("", systemImage: "personalhotspot") {
-                if !device.connected {
-                    self.btCtl.connectDevice(device: self.device)
+            } else {
+                if device.connected {
+                    Button(action: {
+                        self.btCtl.disconnectDevice(device: device)
+                    }) {
+                        Image(systemName: "minus")
+                            .tint(.red)
+                    }
+                } else {
+                    Button(action: {
+                        self.btCtl.connectDevice(device: device)
+                    }) {
+                        Image(systemName: "plus")
+                            .tint(.green)
+                    }
                 }
-            }.tint(device.connected ? .red : .green)
+            }
         }
     }
 }

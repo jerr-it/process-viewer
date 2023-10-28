@@ -104,16 +104,26 @@ class BluetoothCtl : ObservableObject {
         Task.detached { @MainActor in
             do {
                 device.connecting = true
-                print("start connecting")
-                let _ = try self.ssh.runAsync(cmd: "bluetoothctl connect \(device.mac)") { stdout in
-                    if stdout.contains("Connection successful") {
-                        device.connected = true
-                        self.btDevices = self.btDevices
-                    }
-                    device.connecting = false
-                } onStderr: { stderr in
-                    device.connecting = false
+                let stdout = try await self.ssh.runSync(cmd: "bluetoothctl connect \(device.mac)")
+                if stdout.contains("Connection successful") {
+                    device.connected = true
                 }
+                device.connecting = false
+            } catch {
+                print("Unable to connect to device \(device.name) \(device.mac): \(error)")
+            }
+        }
+    }
+    
+    func disconnectDevice(device: BTDevice) {
+        Task.detached { @MainActor in
+            do {
+                device.connecting = true
+                let stdout = try await self.ssh.runSync(cmd: "bluetoothctl disconnect \(device.mac)")
+                if stdout.contains("Connection successful") {
+                    device.connected = true
+                }
+                device.connecting = false
             } catch {
                 print("Unable to connect to device \(device.name) \(device.mac): \(error)")
             }
