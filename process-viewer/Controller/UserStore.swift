@@ -60,10 +60,12 @@ class UserStore : ObservableObject {
         if let documentsDir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
             let fileURL = documentsDir.appendingPathComponent(USER_STORE_FILE)
             do {
+                var fileStr = ""
                 for user in self.userList {
-                    try "\(user.name)\n".write(to: fileURL, atomically: true, encoding: .utf8)
+                    fileStr.append("\(user.name)\n")
                     try keychain.set(user.password, key:"\(user.name)")
                 }
+                try fileStr.write(to: fileURL, atomically: true, encoding: .utf8)
             } catch {
                 print("Unable to store users: \(error)")
             }

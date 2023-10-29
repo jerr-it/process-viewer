@@ -54,9 +54,12 @@ class ServerStore : ObservableObject {
         if let documentsDir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
             let fileURL = documentsDir.appendingPathComponent(SERVER_STORE_FILE)
             do {
+                var str = ""
                 for server in self.serverList {
-                    try "\(server.host),\(server.port)\n".write(to: fileURL, atomically: true, encoding: .utf8)
+                    str.append("\(server.host),\(server.port)\n")
                 }
+                
+                try str.write(to: fileURL, atomically: true, encoding: .utf8)
             } catch {
                 print("Cannot access file to store servers.")
             }
