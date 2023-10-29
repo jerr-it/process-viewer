@@ -38,34 +38,34 @@ struct BTDeviceRow: View {
             Image(systemName: ICON_MAP[device.icon] ?? "questionmark")
             Text("\(device.name)")
             Spacer()
-            Button ("") {
-                modalOpen.toggle()
-            }
             if self.device.connecting {
                 ProgressView()
             } else {
                 if device.connected {
-                    Image(systemName: "minus")
+                    Button("Disconnect") {
+                        self.btCtl.disconnectDevice(device: device)
+                    }
                         .foregroundColor(.red)
-                        .onTapGesture {
-                            self.btCtl.disconnectDevice(device: device)
-                        }
+                        .buttonStyle(BorderlessButtonStyle())
                 } else {
-                    Image(systemName: "plus")
+                    Button("Connect") {
+                        self.btCtl.connectDevice(device: device)
+                    }
                         .foregroundColor(.green)
-                        .onTapGesture {
-                            self.btCtl.connectDevice(device: device)
-                        }
+                        .buttonStyle(BorderlessButtonStyle())
                 }
             }
+        }.onTapGesture {
+            modalOpen.toggle()
         }.sheet(isPresented: $modalOpen) {
-            BTDeviceDetails(device: self.device)
+            BTDeviceDetails(device: self.device, btCtl: self.btCtl)
         }
     }
 }
 
 struct BTDeviceDetails: View {
     @StateObject var device: BTDevice
+    @StateObject var btCtl: BluetoothCtl
     
     var body: some View {
         Text("\(device.name)")
@@ -98,10 +98,37 @@ struct BTDeviceDetails: View {
             }
             Section(header: Text("Status")) {
                 Toggle("Paired", isOn: $device.paired)
-                Toggle("Bonded", isOn: $device.bonded)
+                    .onChange(of: device.paired, perform: { state in
+                        if state {
+                            self.btCtl.pairDevice(device: self.device)
+                        }else {
+                            self.btCtl.unpairDevice(device: self.device)
+                        }
+                    })
                 Toggle("Trusted", isOn: $device.trusted)
+                    .onChange(of: device.trusted, perform: { state in
+                        if state {
+                            self.btCtl.trustDevice(device: self.device)
+                        }else {
+                            self.btCtl.untrustDevice(device: self.device)
+                        }
+                    })                
                 Toggle("Blocked", isOn: $device.blocked)
+                    .onChange(of: device.blocked, perform: { state in
+                        if state {
+                            self.btCtl.blockDevice(device: self.device)
+                        }else {
+                            self.btCtl.unblockDevice(device: self.device)
+                        }
+                    })
                 Toggle("Connected", isOn: $device.connected)
+                    .onChange(of: device.connected, perform: { state in
+                        if state {
+                            self.btCtl.connectDevice(device: self.device)
+                        }else {
+                            self.btCtl.disconnectDevice(device: self.device)
+                        }
+                    })
             }
         }
     }

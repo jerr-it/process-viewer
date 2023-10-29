@@ -97,9 +97,6 @@ class BluetoothCtl : ObservableObject {
                 print("Could not fetch devices: \(stdout)")
             }
             
-            let set1 = Set(self.btDevices)
-            let set2 = Set(devices)
-            
             if Set(self.btDevices) != Set(devices) {
                 self.btDevices = devices
             }
@@ -134,5 +131,29 @@ class BluetoothCtl : ObservableObject {
                 print("Unable to connect to device \(device.name) \(device.mac): \(error)")
             }
         }
+    }
+    
+    func pairDevice(device: BTDevice) {
+        
+    }
+    
+    func unpairDevice(device: BTDevice) {
+        
+    }
+    
+    func trustDevice(device: BTDevice) {
+        
+    }
+    
+    func untrustDevice(device: BTDevice) {
+        
+    }
+    
+    func blockDevice(device: BTDevice) {
+        
+    }
+    
+    func unblockDevice(device: BTDevice) {
+        
     }
 }
