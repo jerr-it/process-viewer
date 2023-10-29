@@ -11,11 +11,16 @@ let REGEX_TEMPLATE: String = "(?<=@: ).+"
 
 class BTDevice : ObservableObject, Identifiable, Hashable {
     static func == (lhs: BTDevice, rhs: BTDevice) -> Bool {
-        return lhs.mac == rhs.mac
+        return lhs.hashValue == rhs.hashValue
     }
     
     func hash(into hasher: inout Hasher) {
         hasher.combine(mac)
+        hasher.combine(paired)
+        hasher.combine(bonded)
+        hasher.combine(trusted)
+        hasher.combine(blocked)
+        hasher.combine(connected)
     }
     
     @Published var connecting: Bool

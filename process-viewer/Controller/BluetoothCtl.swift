@@ -96,7 +96,13 @@ class BluetoothCtl : ObservableObject {
             } catch {
                 print("Could not fetch devices: \(stdout)")
             }
-            self.btDevices = devices
+            
+            let set1 = Set(self.btDevices)
+            let set2 = Set(devices)
+            
+            if Set(self.btDevices) != Set(devices) {
+                self.btDevices = devices
+            }
         }
     }
     
