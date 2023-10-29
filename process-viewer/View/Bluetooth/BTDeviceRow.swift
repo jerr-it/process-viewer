@@ -41,19 +41,17 @@ struct BTDeviceRow: View {
                 ProgressView()
             } else {
                 if device.connected {
-                    Button(action: {
-                        self.btCtl.disconnectDevice(device: device)
-                    }) {
-                        Image(systemName: "minus")
-                            .tint(.red)
-                    }
+                    Image(systemName: "minus")
+                        .foregroundColor(.red)
+                        .onTapGesture {
+                            self.btCtl.disconnectDevice(device: device)
+                        }
                 } else {
-                    Button(action: {
-                        self.btCtl.connectDevice(device: device)
-                    }) {
-                        Image(systemName: "plus")
-                            .tint(.green)
-                    }
+                    Image(systemName: "plus")
+                        .foregroundColor(.green)
+                        .onTapGesture {
+                            self.btCtl.connectDevice(device: device)
+                        }
                 }
             }
         }
