@@ -20,7 +20,13 @@ struct MainPage : View {
     var body: some View {
         NavigationView {
             Form {
-                Section(header: Text("Configuration")) {
+                Section(header: HStack {
+                    Text("Remote")
+                    Spacer()
+                    Text("Status")
+                    Image(systemName: self.ssh.connected ? "checkmark.icloud.fill" : "icloud.fill")
+                        .foregroundColor(self.ssh.connected ? .green : .white)
+                }) {
                     Picker("Server", selection: $server) {
                         ForEach(serverStore.serverList) { serv in
                             Text("\(serv.host):\(serv.port)")
@@ -33,11 +39,18 @@ struct MainPage : View {
                                 .tag(usr)
                         }
                     }
-                    Button(self.ssh.connected ? "Connected" : "Connect", systemImage: self.ssh.connected ? "checkmark.icloud.fill" : "icloud.fill", action: {() -> Void in
-                        self.ssh.connect(server: server, user: user)
+                    Button(
+                        self.ssh.connected ? "Disconnect" : "Connect",
+                        systemImage: self.ssh.connected ? "antenna.radiowaves.left.and.right.slash" : "antenna.radiowaves.left.and.right",
+                        action: {() -> Void in
+                            
+                        if self.ssh.connected {
+                            self.ssh.disconnect()
+                        } else {
+                            self.ssh.connect(server: server, user: user)
+                        }
                     })
-                        .disabled(self.ssh.connected)
-                        .foregroundColor(self.ssh.connected ? .green : .white)
+                        .foregroundColor(self.ssh.connected ? .red : .white)
                 }
                 Section(header: Text("Utils")) {
                     NavigationLink("Processes") {

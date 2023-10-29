@@ -53,6 +53,17 @@ class SSH : ObservableObject {
         }
     }
     
+    func disconnect() {
+        Task.detached { @MainActor in
+            do {
+                try await self.client!.close()
+                self.connected = false
+            } catch {
+                print("Unable to close connection: \(error)")
+            }
+        }
+    }
+    
     func onDisconnect(action: @escaping () -> Void) {
         self.onDisconnectActions.append(action)
     }
