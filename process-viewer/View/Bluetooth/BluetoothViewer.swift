@@ -51,7 +51,14 @@ struct BluetoothViewer: View {
             }
             Section(header: Text("Other")) {
                 List(self.btCtl.btDevices) { device in
-                    if !device.connected && !device.paired {
+                    if !device.connected && !device.paired && !device.blocked {
+                        BTDeviceRow(device: device, btCtl: self.btCtl)
+                    }
+                }
+            }
+            Section(header: Text("Blocked")) {
+                List(self.btCtl.btDevices) { device in
+                    if device.blocked {
                         BTDeviceRow(device: device, btCtl: self.btCtl)
                     }
                 }

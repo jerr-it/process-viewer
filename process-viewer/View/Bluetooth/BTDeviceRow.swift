@@ -37,22 +37,31 @@ struct BTDeviceRow: View {
         HStack {
             Image(systemName: ICON_MAP[device.icon] ?? "questionmark")
             Text("\(device.name)")
+                .foregroundColor(device.blocked ? .gray : .white)
             Spacer()
             if self.device.connecting {
                 ProgressView()
             } else {
-                if device.connected {
-                    Button("Disconnect") {
-                        self.btCtl.disconnectDevice(device: device)
+                if device.blocked {
+                    Button("Unblock") {
+                        self.btCtl.unblockDevice(device: device)
                     }
-                        .foregroundColor(.red)
+                        .foregroundColor(.gray)
                         .buttonStyle(BorderlessButtonStyle())
                 } else {
-                    Button("Connect") {
-                        self.btCtl.connectDevice(device: device)
+                    if device.connected {
+                        Button("Disconnect") {
+                            self.btCtl.disconnectDevice(device: device)
+                        }
+                            .foregroundColor(.red)
+                            .buttonStyle(BorderlessButtonStyle())
+                    } else {
+                        Button("Connect") {
+                            self.btCtl.connectDevice(device: device)
+                        }
+                            .foregroundColor(.green)
+                            .buttonStyle(BorderlessButtonStyle())
                     }
-                        .foregroundColor(.green)
-                        .buttonStyle(BorderlessButtonStyle())
                 }
             }
         }.onTapGesture {
@@ -97,14 +106,6 @@ struct BTDeviceDetails: View {
                 }
             }
             Section(header: Text("Status")) {
-                Toggle("Paired", isOn: $device.paired)
-                    .onChange(of: device.paired, perform: { state in
-                        if state {
-                            self.btCtl.pairDevice(device: self.device)
-                        }else {
-                            self.btCtl.unpairDevice(device: self.device)
-                        }
-                    })
                 Toggle("Trusted", isOn: $device.trusted)
                     .onChange(of: device.trusted, perform: { state in
                         if state {
@@ -112,7 +113,7 @@ struct BTDeviceDetails: View {
                         }else {
                             self.btCtl.untrustDevice(device: self.device)
                         }
-                    })                
+                    }).disabled(device.blocked)
                 Toggle("Blocked", isOn: $device.blocked)
                     .onChange(of: device.blocked, perform: { state in
                         if state {
@@ -128,7 +129,7 @@ struct BTDeviceDetails: View {
                         }else {
                             self.btCtl.disconnectDevice(device: self.device)
                         }
-                    })
+                    }).disabled(device.blocked)
             }
         }
     }

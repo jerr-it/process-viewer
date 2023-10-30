@@ -133,27 +133,55 @@ class BluetoothCtl : ObservableObject {
         }
     }
     
-    func pairDevice(device: BTDevice) {
-        
-    }
-    
-    func unpairDevice(device: BTDevice) {
-        
-    }
-    
     func trustDevice(device: BTDevice) {
-        
+        Task.detached { @MainActor in
+            do {
+                let stdout = try await self.ssh.runSync(cmd: "bluetoothctl trust \(device.mac)")
+                if stdout.contains("trust succeeded") {
+                    device.trusted = true
+                }
+            } catch {
+                print("Unable to trust device \(device.name) \(device.mac): \(error)")
+            }
+        }
     }
     
     func untrustDevice(device: BTDevice) {
-        
+        Task.detached { @MainActor in
+            do {
+                let stdout = try await self.ssh.runSync(cmd: "bluetoothctl untrust \(device.mac)")
+                if stdout.contains("untrust succeeded") {
+                    device.trusted = false
+                }
+            } catch {
+                print("Unable to untrust device \(device.name) \(device.mac): \(error)")
+            }
+        }
     }
     
     func blockDevice(device: BTDevice) {
-        
+        Task.detached { @MainActor in
+            do {
+                let stdout = try await self.ssh.runSync(cmd: "bluetoothctl block \(device.mac)")
+                if stdout.contains("block succeeded") {
+                    device.blocked = true
+                }
+            } catch {
+                print("Unable to block device \(device.name) \(device.mac): \(error)")
+            }
+        }
     }
     
     func unblockDevice(device: BTDevice) {
-        
+        Task.detached { @MainActor in
+            do {
+                let stdout = try await self.ssh.runSync(cmd: "bluetoothctl unblock \(device.mac)")
+                if stdout.contains("unblock succeeded") {
+                    device.blocked = false
+                }
+            } catch {
+                print("Unable to unblock device \(device.name) \(device.mac): \(error)")
+            }
+        }
     }
 }
